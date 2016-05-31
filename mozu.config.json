@@ -1,0 +1,8 @@
+{
+  "baseUrl": "https://home.mozu.com",
+  "developerAccountId": 4353,
+  "developerAccount": {
+    "emailAddress": "goulet@mozu.com"
+  },
+  "workingApplicationKey": "cb1a402.requestRatesAfter.1.0.0.Release"
+}

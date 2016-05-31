@@ -1,0 +1,9 @@
+{
+  "exports": [
+    {
+      "id": "http.commerce.catalog.storefront.shipping.requestRates.after",
+      "virtualPath": "./dist\\commerce.catalog.storefront.shipping.manifest.all.js",
+      "actionId": "http.commerce.catalog.storefront.shipping.requestRates.after"
+    }
+  ]
+}

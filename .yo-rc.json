@@ -1,0 +1,11 @@
+{
+  "generator-mozu-actions": {
+    "testFramework": "manual",
+    "domains": [
+      "commerce.catalog.storefront.shipping"
+    ],
+    "actionNames": [
+      "http.commerce.catalog.storefront.shipping.requestRates.after"
+    ]
+  }
+}
