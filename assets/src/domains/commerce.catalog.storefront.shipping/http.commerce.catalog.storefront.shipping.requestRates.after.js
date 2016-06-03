@@ -53,47 +53,50 @@ module.exports = function(context, callback) {
                 var mozuIndex = _.findIndex(context.response.body.rates, function(rate){
                     return rate.carrierId == "fedex";
                 });
-                // Mozu's FedEx information
-                var shippingRates = context.response.body.rates[mozuIndex].shippingRates;
-                
-                // Loop through each rate returned from fedex, and change the Mozu listed rates to the FedEx account rates
-                _.forEach(fedexRates, function(rate){
-                    // Check if rate is enabled
-                    var index = _.findIndex(shippingRates, function(info){
-                        return info.code == "fedex_"+ rate.ServiceType;
-                    });
+                if(mozuIndex > -1){
+                    // Mozu's FedEx information
+                    var shippingRates = context.response.body.rates[mozuIndex].shippingRates;
                     
-                    // if rate is enabled, change Mozu model
-                    if(index > -1){
-                        shippingRates[index].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
-                        _.forEach(shippingRates[index].customAttributes, function(attr){
-                            if(attr.key == "base_charge"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalBaseCharge.Amount +" USD";
-                            } else if (attr.key == "total_freight_discounts"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalFreightDiscounts.Amount +" USD";
-                            } else if (attr.key == "total_surcharges"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalSurcharges.Amount +" USD";
-                            }
+                    // Loop through each rate returned from fedex, and change the Mozu listed rates to the FedEx account rates
+                
+                    _.forEach(fedexRates, function(rate){
+                        // Check if rate is enabled
+                        var index = _.findIndex(shippingRates, function(info){
+                            return info.code == "fedex_"+ rate.ServiceType;
                         });
-                        shippingRates[index].shippingItemRates[0].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
-                    } else if (rate.ServiceType == "GROUND_HOME_DELIVERY"){
-                        // Ground is unique and has a different code
-                        index = _.findIndex(shippingRates, function(info){
-                            return info.code == "fedex_FEDEX_GROUND";
-                        });
-                        shippingRates[index].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
-                        _.forEach(shippingRates[index].customAttributes, function(attr){
-                            if(attr.key == "base_charge"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalBaseCharge.Amount +" USD";
-                            } else if (attr.key == "total_freight_discounts"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalFreightDiscounts.Amount +" USD";
-                            } else if (attr.key == "total_surcharges"){
-                                attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalSurcharges.Amount +" USD";
-                            }
-                        });
-                        shippingRates[index].shippingItemRates[0].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
-                    }
-                });
+                        
+                        // if rate is enabled, change Mozu model
+                        if(index > -1){
+                            shippingRates[index].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
+                            _.forEach(shippingRates[index].customAttributes, function(attr){
+                                if(attr.key == "base_charge"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalBaseCharge.Amount +" USD";
+                                } else if (attr.key == "total_freight_discounts"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalFreightDiscounts.Amount +" USD";
+                                } else if (attr.key == "total_surcharges"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalSurcharges.Amount +" USD";
+                                }
+                            });
+                            shippingRates[index].shippingItemRates[0].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
+                        } else if (rate.ServiceType == "GROUND_HOME_DELIVERY"){
+                            // Ground is unique and has a different code
+                            index = _.findIndex(shippingRates, function(info){
+                                return info.code == "fedex_FEDEX_GROUND";
+                            });
+                            shippingRates[index].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
+                            _.forEach(shippingRates[index].customAttributes, function(attr){
+                                if(attr.key == "base_charge"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalBaseCharge.Amount +" USD";
+                                } else if (attr.key == "total_freight_discounts"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalFreightDiscounts.Amount +" USD";
+                                } else if (attr.key == "total_surcharges"){
+                                    attr.value = rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalSurcharges.Amount +" USD";
+                                }
+                            });
+                            shippingRates[index].shippingItemRates[0].amount = parseFloat(rate.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetChargeWithDutiesAndTaxes.Amount);
+                        }
+                    });
+                }
             } else {
                 console.log(result);
             }
