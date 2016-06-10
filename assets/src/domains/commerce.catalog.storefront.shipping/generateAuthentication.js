@@ -26,7 +26,6 @@ module.exports = function generateAuthentication(cred, shippingInfo) {
             CarrierCodes: ['FDXE','FDXG'],
             RequestedShipment: {
                 DropoffType: 'REGULAR_PICKUP',
-                //ServiceType: 'FEDEX_GROUND',
                 PackagingType: 'YOUR_PACKAGING',
                 Shipper: {
                 Contact: {
@@ -55,7 +54,7 @@ module.exports = function generateAuthentication(cred, shippingInfo) {
                             shippingInfo.DestinationAddress.Address1
                         ],
                         City: shippingInfo.DestinationAddress.CityOrTown,
-                        StateOrProvinceCode: shippingInfo.DestinationAddress.StateOrProvince.length <= 2 ? shippingInfo.DestinationAddress.StateOrProvince : "",
+                        StateOrProvinceCode: shippingInfo.DestinationAddress.StateOrProvince ? shippingInfo.DestinationAddress.StateOrProvince.length <= 2 ? shippingInfo.DestinationAddress.StateOrProvince : "" : "",
                         PostalCode: shippingInfo.DestinationAddress.PostalOrZipCode,
                         CountryCode: shippingInfo.DestinationAddress.CountryCode,
                         Residential: shippingInfo.DestinationAddress.AddressType == "Residential" ? true : false
