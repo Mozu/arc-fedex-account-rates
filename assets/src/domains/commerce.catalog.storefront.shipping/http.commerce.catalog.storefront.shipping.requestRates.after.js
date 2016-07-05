@@ -46,7 +46,10 @@ module.exports = function(context, callback) {
         client.getRates(fedexParams, function(err, result){
             
             // Check if returned FedEx results are successful
-            if(result.HighestSeverity == 'SUCCESS'){
+            if(err){
+                console.log(err);
+                console.log(result);
+            } else {
                 var fedexRates = result.RateReplyDetails;
                 
                 // Get index of Mozu's FedEx shipping information
@@ -97,8 +100,6 @@ module.exports = function(context, callback) {
                         }
                     });
                 }
-            } else {
-                console.log(result);
             }
             callback();
                 
